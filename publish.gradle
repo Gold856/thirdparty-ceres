@@ -109,7 +109,7 @@ ext.addTaskToCopyAllOutputs = { task ->
 }
 
 task buildVcpkg(type: Exec) {
-    def baseArgs = ['install']
+    def baseArgs = ['install', "--overlay-ports=$rootDir/overlayPorts"]
     outputs.dir "vcpkg_installed/$triplet"
     executable "$rootDir/vcpkg/vcpkg"
     args baseArgs + "--triplet=$triplet"
