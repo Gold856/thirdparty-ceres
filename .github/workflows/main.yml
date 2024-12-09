@@ -79,6 +79,8 @@ jobs:
           path: gradleDir/outputs/
 
   build-mac:
+    env:
+      MACOSX_DEPLOYMENT_TARGET: 13.3
     strategy:
       fail-fast: false
       matrix:
@@ -118,6 +120,8 @@ jobs:
     runs-on: macos-14
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: 'true'
       - uses: actions/download-artifact@v4
         with:
           name: macOS
@@ -140,11 +144,15 @@ jobs:
   combine:
     name: Combine
     needs: [build-docker, build-windows, make_universal]
-    runs-on: ubuntu-latest
+    runs-on: macos-14
     steps:
       - uses: actions/checkout@v4
         with:
           repository: wpilibsuite/build-tools
+      - uses: actions/checkout@v4
+        with:
+          submodules: 'true'
+          path: thirdparty-ceres
       - uses: actions/download-artifact@v4
         with:
           path: combiner/products/build/allOutputs
@@ -166,6 +174,8 @@ jobs:
           RUN_AZURE_ARTIFACTORY_RELEASE: 'TRUE'
           ARTIFACTORY_PUBLISH_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
           ARTIFACTORY_PUBLISH_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
+      - run: ./gradlew wpical:build
+        working-directory: thirdparty-ceres/allwpilib
       - uses: actions/upload-artifact@v4
         with:
           name: Maven

@@ -87,7 +87,7 @@ ext.platformPath = getPlatformPath(triplet)
 ext.platformClassifier = ext.platformPath.replaceFirst('/', '')
 
 ext.repo = "thirdparty-ceres"
-def pubVersion = "$ext.version-3"
+def pubVersion = "$ext.version-4"
 
 def outputsFolder = file("$project.buildDir/outputs")
 
